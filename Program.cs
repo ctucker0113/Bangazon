@@ -32,6 +32,66 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapGet("/api/users", (BangazonDbContext db) =>
+{
+    return db.Users.ToList();
+});
+
+
+app.MapGet("/api/users/{id}", (BangazonDbContext db, int id) =>
+{
+    var userID = db.Users.FirstOrDefault(c => c.ID == id);
+
+    if (userID == null)
+    {
+        return Results.NotFound("User Not Found.");
+    }
+
+    return Results.Ok(userID);
+});
+
+
+app.MapGet("/api/products", (BangazonDbContext db) =>
+{
+    return db.Products.ToList();
+});
+
+
+app.MapGet("/api/products/{id}", (BangazonDbContext db, int id) =>
+{
+    var productID = db.Products.FirstOrDefault(c => c.ID == id);
+
+    if (productID == null)
+    {
+        return Results.NotFound("Product Not Found.");
+    }
+
+    return Results.Ok(productID);
+});
+
+
+app.MapGet("/api/orders", (BangazonDbContext db) =>
+{
+    return db.Orders.ToList();
+});
+
+
+app.MapGet("/api/orders/{id}", (BangazonDbContext db, int id) =>
+{
+    var orderID = db.Orders.FirstOrDefault(c => c.ID == id);
+
+    if (orderID == null)
+    {
+        return Results.NotFound("Order Not Found.");
+    }
+
+    return Results.Ok(orderID);
+});
+
+app.MapGet("/api/categories", (BangazonDbContext db) =>
+{
+    return db.Categories.ToList();
+});
 
 app.Run();
 

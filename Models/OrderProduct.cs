@@ -3,9 +3,9 @@ namespace Bangazon.Models
 {
 	public class OrderProduct
 	{
-		public OrderProduct()
-		{
-		}
+		public int ID { get; set; }
+		public int OrderID { get; set; }
+		public int ProductID { get; set; }
 	}
 }
 

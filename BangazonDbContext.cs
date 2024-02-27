@@ -18,7 +18,7 @@ public class BangazonDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // seed data with campsite types
+        // CATEGORY Sample Data
         modelBuilder.Entity<Category>().HasData(new Category[]
         {
             new Category {
@@ -32,6 +32,7 @@ public class BangazonDbContext : DbContext
             },
         });
 
+        // ORDER Sample Data
         modelBuilder.Entity<Order>().HasData(new Order [] {
             new Order {
                 ID = 1,
@@ -50,6 +51,7 @@ public class BangazonDbContext : DbContext
             }
         });
 
+        // PAYMENT TYPE Sample Data
         modelBuilder.Entity<PaymentType>().HasData(new PaymentType[] {
             new PaymentType {
                 ID = 1,
@@ -67,6 +69,7 @@ public class BangazonDbContext : DbContext
             }
         });
 
+        // PRODUCT Sample Data
         modelBuilder.Entity<Product>().HasData(new Product[] {
 
             new Product {
@@ -89,9 +92,21 @@ public class BangazonDbContext : DbContext
                 CategoryID = 2,
                 TimePosted = new DateTime(2022, 10, 23),
                 SellerID = 2
+            },
+
+            new Product {
+                ID = 3,
+                Name = "Ethernet Cable",
+                Description = "For those who prefer fast internet speeds and don't mind the ugly look of cables",
+                Quantity = 2,
+                Price = 30.00M,
+                CategoryID = 2,
+                TimePosted = new DateTime(2022, 10, 30),
+                SellerID = 1
             }
         });
 
+        // USER Sample Data
         modelBuilder.Entity<User>().HasData(new User[] {
 
             new User {
@@ -109,6 +124,7 @@ public class BangazonDbContext : DbContext
             }
         });
 
+        // ORDERPRODUCT Sample Data
         modelBuilder.Entity<OrderProduct>().HasData(new OrderProduct[] {
 
             new OrderProduct {

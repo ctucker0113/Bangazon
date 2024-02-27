@@ -32,12 +32,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+//GET All Users
 app.MapGet("/api/users", (BangazonDbContext db) =>
 {
     return db.Users.ToList();
 });
 
 
+// GET a Single User
 app.MapGet("/api/users/{id}", (BangazonDbContext db, int id) =>
 {
     var userID = db.Users.FirstOrDefault(c => c.ID == id);
@@ -51,12 +54,14 @@ app.MapGet("/api/users/{id}", (BangazonDbContext db, int id) =>
 });
 
 
+// GET All Products
 app.MapGet("/api/products", (BangazonDbContext db) =>
 {
     return db.Products.ToList();
 });
 
 
+// GET A Single Product
 app.MapGet("/api/products/{id}", (BangazonDbContext db, int id) =>
 {
     var productID = db.Products.FirstOrDefault(c => c.ID == id);
@@ -70,12 +75,15 @@ app.MapGet("/api/products/{id}", (BangazonDbContext db, int id) =>
 });
 
 
+
+//GET All Orders
 app.MapGet("/api/orders", (BangazonDbContext db) =>
 {
     return db.Orders.ToList();
 });
 
 
+//GET a Single Order
 app.MapGet("/api/orders/{id}", (BangazonDbContext db, int id) =>
 {
     var orderID = db.Orders.FirstOrDefault(c => c.ID == id);
@@ -88,10 +96,63 @@ app.MapGet("/api/orders/{id}", (BangazonDbContext db, int id) =>
     return Results.Ok(orderID);
 });
 
+//GET All Categories
 app.MapGet("/api/categories", (BangazonDbContext db) =>
 {
     return db.Categories.ToList();
 });
+
+
+// GET All Products for a Single Seller
+app.MapGet("/api/products/by-seller", (BangazonDbContext db, int sellerId) =>
+{
+    var productsFilteredBySeller = db.Products.Where(c => c.SellerID == sellerId).ToList();
+
+    // If any of the products do NOT match...
+    if (!productsFilteredBySeller.Any())
+    {
+        return Results.NotFound("No Products found for this seller.");
+    }
+
+    return Results.Ok(productsFilteredBySeller);
+});
+
+// GET All Products for a Single Category
+app.MapGet("/api/products/by-category", (BangazonDbContext db, int categoryId) =>
+{
+    var productsFilteredByCategory = db.Products.Where(c => c.CategoryID == categoryId).ToList();
+
+    // If any of the products do NOT match...
+    if (!productsFilteredByCategory.Any())
+    {
+        return Results.NotFound("No Products found for this category.");
+    }
+
+    return Results.Ok(productsFilteredByCategory);
+});
+
+// GET All Purchases For a Single User
+app.MapGet("/api/orders/by-user", (BangazonDbContext db, int userId) =>
+{
+    var allOrdersForASingleUser = db.Orders.Where(c => c.CustomerID == userId).ToList();
+
+    if (!allOrdersForASingleUser.Any())
+    {
+        return Results.NotFound("No Orders found for this customer.");
+    }
+
+    return Results.Ok(allOrdersForASingleUser);
+});
+
+
+// CREATE a User
+app.MapPost("/api/users", (BangazonDbContext db, User newUser) =>
+{
+    db.Users.Add(newUser);
+    db.SaveChanges();
+    return Results.Created($"/api/users/{newUser.ID}", newUser);
+});
+
 
 app.Run();
 

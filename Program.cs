@@ -154,5 +154,100 @@ app.MapPost("/api/users", (BangazonDbContext db, User newUser) =>
 });
 
 
+// UPDATE a User
+app.MapPut("/api/users/{id}", (BangazonDbContext db, int id, User user) =>
+{
+    User userToUpdate = db.Users.SingleOrDefault(user => user.ID == id);
+
+    if (userToUpdate == null)
+    {
+        return Results.NotFound();
+    }
+
+    userToUpdate.Name = user.Name;
+    userToUpdate.Email = user.Email;
+    userToUpdate.IsSeller = user.IsSeller;
+
+    db.SaveChanges();
+    return Results.NoContent();
+});
+
+// CREATE an Order
+app.MapPost("/api/orders", (BangazonDbContext db, Order newOrder) =>
+{
+    db.Orders.Add(newOrder);
+    db.SaveChanges();
+    return Results.Created($"/api/orders/{newOrder.ID}", newOrder);
+});
+
+
+// CREATE an OrderProduct (i.e. - Add a Product to an Order)
+app.MapPost("/api/orderProducts", (BangazonDbContext db, OrderProduct newOrderProduct) =>
+{
+    db.OrderProducts.Add(newOrderProduct);
+    db.SaveChanges();
+    return Results.Created($"/api/orderProducts/{newOrderProduct.ID}", newOrderProduct);
+});
+
+// DELETE an OrderProduct (i.e. - Delete a Product From an Order)
+app.MapDelete("/api/orderProducts/{id}", (BangazonDbContext db, int id) =>
+{
+    OrderProduct orderProductToDelete = db.OrderProducts.SingleOrDefault(orderProductToDelete => orderProductToDelete.ID == id);
+    if (orderProductToDelete == null)
+    {
+        return Results.NotFound();
+    }
+    db.OrderProducts.Remove(orderProductToDelete);
+    db.SaveChanges();
+    return Results.NoContent();
+});
+
+
+// UPDATE an Order
+app.MapPut("/api/orders/{id}", (BangazonDbContext db, int id, Order order) =>
+{
+    Order orderToUpdate = db.Orders.SingleOrDefault(order => order.ID == id);
+    if (orderToUpdate == null)
+    {
+        return Results.NotFound();
+    }
+    orderToUpdate.PaymentType = order.PaymentType;
+    orderToUpdate.OrderOpen = order.OrderOpen;
+    orderToUpdate.OrderDate = order.OrderDate;
+
+    db.SaveChanges();
+    return Results.NoContent();
+});
+
+
+// CREATE a New Product
+app.MapPost("/api/products", (BangazonDbContext db, Product newProduct) =>
+{
+    db.Products.Add(newProduct);
+    db.SaveChanges();
+    return Results.Created($"/api/products/{newProduct.ID}", newProduct);
+});
+
+
+// UPDATE a Product
+app.MapPut("/api/products/{id}", (BangazonDbContext db, int id, Product product) =>
+{
+    Product productToUpdate = db.Products.SingleOrDefault(product => product.ID == id);
+    if (productToUpdate == null)
+    {
+        return Results.NotFound();
+    }
+
+    productToUpdate.Name = product.Name;
+    productToUpdate.Description = product.Description;
+    productToUpdate.Quantity = product.Quantity;
+    productToUpdate.Price = product.Price;
+    productToUpdate.CategoryID = product.CategoryID;
+
+    db.SaveChanges();
+    return Results.NoContent();
+});
+
+
 app.Run();
 
